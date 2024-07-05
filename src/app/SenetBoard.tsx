@@ -53,7 +53,7 @@ function Space({ item, index }: SpaceProps) {
 	return (
 		<div className="w-24 aspect-square grid place-items-center border-2 text-5xl cursor-pointer select-none">
 			{index === HOUSE_OF_REBIRTH ? '☥' : null}
-			{index === SAFE_HOUSE_1 ? '𓆾' : null}
+			{index === SAFE_HOUSE_1 ? '𓄤𓄤𓄤' : null}
 			{index === HOUSE_OF_WATER ? '𓈗' : null}
 			{index === SAFE_HOUSE_2 ? '𓅢' : null}
 			{index === SAFE_HOUSE_3 ? '𐦝' : null}
