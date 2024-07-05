@@ -52,12 +52,16 @@ interface SpaceProps {
 function Space({ item, index }: SpaceProps) {
 	return (
 		<div className="w-24 aspect-square grid place-items-center border-2 text-5xl cursor-pointer select-none">
-			{index === HOUSE_OF_REBIRTH ? '☥' : null}
-			{index === SAFE_HOUSE_1 ? '𓄤𓄤𓄤' : null}
-			{index === HOUSE_OF_WATER ? '𓈗' : null}
-			{index === SAFE_HOUSE_2 ? '𓅢' : null}
-			{index === SAFE_HOUSE_3 ? '𐦝' : null}
-			{item}
+			<span className="text-gray-300 row-start-1 row-span-1 col-start-1 col-span-1">
+				{index === HOUSE_OF_REBIRTH ? '☥' : null}
+				{index === SAFE_HOUSE_1 ? '𓄤𓄤𓄤' : null}
+				{index === HOUSE_OF_WATER ? '𓈗' : null}
+				{index === SAFE_HOUSE_2 ? '𓅢' : null}
+				{index === SAFE_HOUSE_3 ? '𐦝' : null}
+			</span>
+			<span className="row-start-1 row-span-1 col-start-1 col-span-1">
+				{item}
+			</span>
 		</div>
 	);
 }
