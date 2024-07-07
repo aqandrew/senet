@@ -35,6 +35,21 @@ export default function SenetGame() {
 	const didSticksRoll = !sticks.every((stick) => stick === null);
 	const spacesToMove =
 		sticks.reduce((total: number, stick) => total + stick!, 0) || 6;
+	// TODO solve prop drilling before adding legal move marker to Space
+	const legalForwardMoves = spaces.map((item, index) => {
+		const turnPawn =
+			turn === 'black' ? BLACK_PAWN : turn === 'white' ? WHITE_PAWN : null;
+
+		// TODO account for the following conditions:
+		//   - can't occupy the same space as a friendly pawn
+		//   - 2 pieces in a row can't be attacked
+		//   - 3 pieces in a row can't be attacked or passed
+		if (item === turnPawn) {
+			return index + spacesToMove;
+		}
+
+		return null;
+	});
 
 	// fill sticks with random bits
 	function rollSticks() {
