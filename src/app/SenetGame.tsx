@@ -1,6 +1,7 @@
 'use client';
 
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
+import { atom, useAtom } from 'jotai';
 import clsx from 'clsx';
 
 const NUM_COLUMNS = 10;
@@ -20,14 +21,14 @@ type Stick = 0 | 1 | null;
 type Turn = 'black' | 'white';
 type SelectedSpaceIndex = number | null;
 
+const selectedSpaceIndexAtom = atom<SelectedSpaceIndex>(null);
+
 export default function SenetGame() {
 	const [spaces, setSpaces] = useState<Item[]>(
 		new Array(30)
 			.fill(null)
 			.map((_, i) => (i < 10 ? (i % 2 ? BLACK_PAWN : WHITE_PAWN) : null))
 	);
-	const [selectedSpaceIndex, setSelectedSpaceIndex] =
-		useState<SelectedSpaceIndex>(null);
 	const [turnNum, setTurnNum] = useState(1);
 	const [sticks, setSticks] = useState<Stick[]>([null, null, null, null]);
 
@@ -58,13 +59,7 @@ export default function SenetGame() {
 
 	return (
 		<>
-			{/* TODO solve prop drilling for selectedSpaceIndex into Space */}
-			<Board
-				spaces={spaces}
-				turn={turn}
-				selectedSpaceIndex={selectedSpaceIndex}
-				setSelectedSpaceIndex={setSelectedSpaceIndex}
-			/>
+			<Board spaces={spaces} turn={turn} />
 			<Sticks sticks={sticks} />
 
 			<section className="mb-6">
@@ -95,16 +90,9 @@ export default function SenetGame() {
 interface BoardProps {
 	spaces: Item[];
 	turn: Turn;
-	selectedSpaceIndex: SelectedSpaceIndex;
-	setSelectedSpaceIndex: Dispatch<SetStateAction<SelectedSpaceIndex>>;
 }
 
-function Board({
-	spaces,
-	turn,
-	selectedSpaceIndex,
-	setSelectedSpaceIndex,
-}: BoardProps) {
+function Board({ spaces, turn }: BoardProps) {
 	return (
 		<section className="mb-6">
 			<h2 className="font-bold text-xl mb-2">Game board</h2>
@@ -120,14 +108,7 @@ function Board({
 							key={rowNum}
 						>
 							{spaces.slice(indexStart, indexEnd).map((item, i) => (
-								<Space
-									item={item}
-									index={indexStart + i}
-									turn={turn}
-									selectedSpaceIndex={selectedSpaceIndex}
-									setSelectedSpaceIndex={setSelectedSpaceIndex}
-									key={i}
-								/>
+								<Space item={item} index={indexStart + i} turn={turn} key={i} />
 							))}
 						</div>
 					);
@@ -141,17 +122,13 @@ interface SpaceProps {
 	item: Item;
 	index: number;
 	turn: Turn;
-	selectedSpaceIndex: SelectedSpaceIndex;
-	setSelectedSpaceIndex: Dispatch<SetStateAction<SelectedSpaceIndex>>;
 }
 
-function Space({
-	item,
-	index,
-	turn,
-	selectedSpaceIndex,
-	setSelectedSpaceIndex,
-}: SpaceProps) {
+function Space({ item, index, turn }: SpaceProps) {
+	const [selectedSpaceIndex, setSelectedSpaceIndex] = useAtom(
+		selectedSpaceIndexAtom
+	);
+
 	const isSelectable =
 		(turn === 'black' && item === BLACK_PAWN) ||
 		(turn === 'white' && item === WHITE_PAWN);
