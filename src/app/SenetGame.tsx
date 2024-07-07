@@ -18,6 +18,7 @@ const SAFE_HOUSE_3 = 28;
 
 type Stick = 0 | 1 | null;
 type Turn = 'black' | 'white';
+type SelectedSpaceIndex = number | null;
 
 export default function SenetGame() {
 	const [spaces, setSpaces] = useState<Item[]>(
@@ -25,6 +26,8 @@ export default function SenetGame() {
 			.fill(null)
 			.map((_, i) => (i < 10 ? (i % 2 ? BLACK_PAWN : WHITE_PAWN) : null))
 	);
+	const [selectedSpaceIndex, setSelectedSpaceIndex] =
+		useState<SelectedSpaceIndex>(null);
 	const [turnNum, setTurnNum] = useState(1);
 	const [sticks, setSticks] = useState<Stick[]>([null, null, null, null]);
 
@@ -40,7 +43,13 @@ export default function SenetGame() {
 
 	return (
 		<>
-			<Board spaces={spaces} turn={turn} />
+			{/* TODO solve prop drilling for selectedSpaceIndex into Space */}
+			<Board
+				spaces={spaces}
+				turn={turn}
+				selectedSpaceIndex={selectedSpaceIndex}
+				setSelectedSpaceIndex={setSelectedSpaceIndex}
+			/>
 			<Sticks sticks={sticks} />
 
 			<section className="mb-6">
@@ -71,9 +80,16 @@ export default function SenetGame() {
 interface BoardProps {
 	spaces: Item[];
 	turn: Turn;
+	selectedSpaceIndex: SelectedSpaceIndex;
+	setSelectedSpaceIndex: Dispatch<SetStateAction<SelectedSpaceIndex>>;
 }
 
-function Board({ spaces, turn }: BoardProps) {
+function Board({
+	spaces,
+	turn,
+	selectedSpaceIndex,
+	setSelectedSpaceIndex,
+}: BoardProps) {
 	return (
 		<section className="mb-6">
 			<h2 className="font-bold text-xl mb-2">Game board</h2>
@@ -89,7 +105,14 @@ function Board({ spaces, turn }: BoardProps) {
 							key={rowNum}
 						>
 							{spaces.slice(indexStart, indexEnd).map((item, i) => (
-								<Space item={item} index={indexStart + i} turn={turn} key={i} />
+								<Space
+									item={item}
+									index={indexStart + i}
+									turn={turn}
+									selectedSpaceIndex={selectedSpaceIndex}
+									setSelectedSpaceIndex={setSelectedSpaceIndex}
+									key={i}
+								/>
 							))}
 						</div>
 					);
@@ -103,15 +126,29 @@ interface SpaceProps {
 	item: Item;
 	index: number;
 	turn: Turn;
+	selectedSpaceIndex: SelectedSpaceIndex;
+	setSelectedSpaceIndex: Dispatch<SetStateAction<SelectedSpaceIndex>>;
 }
 
-function Space({ item, index, turn }: SpaceProps) {
+function Space({
+	item,
+	index,
+	turn,
+	selectedSpaceIndex,
+	setSelectedSpaceIndex,
+}: SpaceProps) {
 	const isSelectable =
 		(turn === 'black' && item === BLACK_PAWN) ||
 		(turn === 'white' && item === WHITE_PAWN);
 	const notAllowed =
 		(turn === 'black' && item === WHITE_PAWN) ||
 		(turn === 'white' && item === BLACK_PAWN);
+
+	function handleClick() {
+		if (isSelectable) {
+			setSelectedSpaceIndex(index);
+		}
+	}
 
 	return (
 		<div
@@ -120,10 +157,15 @@ function Space({ item, index, turn }: SpaceProps) {
 				isSelectable && 'cursor-pointer',
 				notAllowed && 'cursor-not-allowed'
 			)}
+			tabIndex={0}
+			onClick={handleClick}
 		>
+			{/* space number */}
 			<span className="absolute top-1 right-2 text-sm opacity-90">
 				{index + 1}
 			</span>
+
+			{/* space symbol */}
 			<span
 				className={clsx(
 					'text-orange-900 opacity-30 row-start-1 row-span-1 col-start-1 col-span-1',
@@ -138,6 +180,14 @@ function Space({ item, index, turn }: SpaceProps) {
 				{index === SAFE_HOUSE_2 ? '𓅢' : null}
 				{index === SAFE_HOUSE_3 ? '𐦝' : null}
 			</span>
+
+			{/* TODO improve a11y */}
+			{/* selection marker */}
+			{selectedSpaceIndex === index ? (
+				<span className="absolute w-16 aspect-square border-2 border-orange-900 rounded-full"></span>
+			) : null}
+
+			{/* pawn, if present */}
 			<span className="row-start-1 row-span-1 col-start-1 col-span-1">
 				{item}
 			</span>
