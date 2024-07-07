@@ -49,12 +49,12 @@ export default function SenetGame() {
 				<p>
 					{turnNum % 2 ? 'black' : 'white'}'s turn:{' '}
 					{didSticksRoll ? (
-						<span className="inline-block my-2">
+						<span className="inline-block rounded p-2 border-2 border-orange-900 border-dotted">
 							{`move ${spacesToMove} space${spacesToMove > 1 ? 's' : ''}`}
 						</span>
 					) : (
 						<button
-							className="rounded p-2 bg-teal-700 hover:bg-teal-600 text-teal-50 cursor-pointer"
+							className="rounded p-2 border-2 border-teal-700 bg-teal-700 hover:bg-teal-600 text-teal-50 cursor-pointer"
 							onClick={rollSticks}
 						>
 							Roll sticks
