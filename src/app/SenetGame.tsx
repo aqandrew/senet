@@ -6,9 +6,9 @@ import clsx from 'clsx';
 const NUM_COLUMNS = 10;
 const NUM_ROWS = 3;
 
-const BLACK_PAWN = '♟';
-const WHITE_PAWN = '♙';
-type Item = typeof BLACK_PAWN | typeof WHITE_PAWN | null;
+const BLACK_PIECE = '♟';
+const WHITE_PIECE = '♙';
+type Item = typeof BLACK_PIECE | typeof WHITE_PIECE | null;
 
 const HOUSE_OF_REBIRTH = 14;
 const SAFE_HOUSE_1 = 25;
@@ -25,7 +25,7 @@ export default function SenetGame() {
 	const [spaces, setSpaces] = useState<Item[]>(
 		new Array(30)
 			.fill(null)
-			.map((_, i) => (i < 10 ? (i % 2 ? BLACK_PAWN : WHITE_PAWN) : null))
+			.map((_, i) => (i < 10 ? (i % 2 ? BLACK_PIECE : WHITE_PIECE) : null))
 	);
 	const [selectedSpaceIndex, setSelectedSpaceIndex] =
 		useState<SpaceIndex>(null);
@@ -37,16 +37,16 @@ export default function SenetGame() {
 	const spacesToMove =
 		sticks.reduce((total: number, stick) => total + stick!, 0) ||
 		(didSticksRoll ? 6 : 0);
-	const turnPawn =
-		turn === 'black' ? BLACK_PAWN : turn === 'white' ? WHITE_PAWN : null;
+	const turnPiece =
+		turn === 'black' ? BLACK_PIECE : turn === 'white' ? WHITE_PIECE : null;
 	const legalForwardMoves = spaces.map((item, index) => {
 		// TODO account for the following conditions:
 		//   - 2 pieces in a row can't be attacked
 		//   - 3 pieces in a row can't be attacked or passed
-		if (item === turnPawn) {
+		if (item === turnPiece) {
 			const possibleForwardSpace = index + spacesToMove;
 
-			if (spaces[possibleForwardSpace] !== turnPawn) {
+			if (spaces[possibleForwardSpace] !== turnPiece) {
 				return possibleForwardSpace;
 			}
 		}
@@ -68,7 +68,7 @@ export default function SenetGame() {
 	function moveSelectedPiece(index: number) {
 		const newSpaces = [...spaces];
 		newSpaces[selectedSpaceIndex!] = newSpaces[index];
-		newSpaces[index] = turnPawn;
+		newSpaces[index] = turnPiece;
 		setSpaces(newSpaces);
 
 		nextTurn();
@@ -188,11 +188,11 @@ function Space({
 	const isLegalForwardMoveSpace =
 		selectedSpaceIndex && legalForwardMoves[selectedSpaceIndex] === index;
 	const isSelectable =
-		(turn === 'black' && item === BLACK_PAWN) ||
-		(turn === 'white' && item === WHITE_PAWN);
+		(turn === 'black' && item === BLACK_PIECE) ||
+		(turn === 'white' && item === WHITE_PIECE);
 	const notAllowed =
-		(turn === 'black' && item === WHITE_PAWN) ||
-		(turn === 'white' && item === BLACK_PAWN);
+		(turn === 'black' && item === WHITE_PIECE) ||
+		(turn === 'white' && item === BLACK_PIECE);
 
 	function handleClick() {
 		if (isSelectable) {
@@ -246,7 +246,7 @@ function Space({
 				<span className="absolute w-16 aspect-square border-2 border-orange-900 border-dashed rounded-full"></span>
 			) : null}
 
-			{/* pawn, if present */}
+			{/* piece, if present */}
 			<span className="row-start-1 row-span-1 col-start-1 col-span-1">
 				{item}
 			</span>
