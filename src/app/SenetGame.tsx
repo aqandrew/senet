@@ -107,7 +107,14 @@ function Space({ item, index }: SpaceProps) {
 			<span className="absolute top-1 right-2 text-sm opacity-90">
 				{index + 1}
 			</span>
-			<span className="text-orange-900 opacity-30 row-start-1 row-span-1 col-start-1 col-span-1">
+			<span
+				className={clsx(
+					'text-orange-900 opacity-30 row-start-1 row-span-1 col-start-1 col-span-1',
+					index === SAFE_HOUSE_1 && 'translate-y-2',
+					index === HOUSE_OF_WATER && '-translate-y-1',
+					index === SAFE_HOUSE_2 && 'translate-y-1'
+				)}
+			>
 				{index === HOUSE_OF_REBIRTH ? '☥' : null}
 				{index === SAFE_HOUSE_1 ? '𓄤𓄤𓄤' : null}
 				{index === HOUSE_OF_WATER ? '𓈗' : null}
