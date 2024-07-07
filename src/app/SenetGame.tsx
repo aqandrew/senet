@@ -17,6 +17,7 @@ const SAFE_HOUSE_2 = 27;
 const SAFE_HOUSE_3 = 28;
 
 type Stick = 0 | 1 | null;
+type Turn = 'black' | 'white';
 
 export default function SenetGame() {
 	const [spaces, setSpaces] = useState<Item[]>(
@@ -27,6 +28,7 @@ export default function SenetGame() {
 	const [turnNum, setTurnNum] = useState(1);
 	const [sticks, setSticks] = useState<Stick[]>([null, null, null, null]);
 
+	const turn: Turn = turnNum % 2 ? 'black' : 'white';
 	const didSticksRoll = !sticks.every((stick) => stick === null);
 	const spacesToMove =
 		sticks.reduce((total: number, stick) => total + stick!, 0) || 6;
@@ -38,7 +40,7 @@ export default function SenetGame() {
 
 	return (
 		<>
-			<Board spaces={spaces} />
+			<Board spaces={spaces} turn={turn} />
 			<Sticks sticks={sticks} />
 
 			<section className="mb-6">
@@ -47,7 +49,7 @@ export default function SenetGame() {
 				<p>turn number: {turnNum}</p>
 				{/* TODO account for extra turns */}
 				<p>
-					{turnNum % 2 ? 'black' : 'white'}'s turn:{' '}
+					{turn}'s turn:{' '}
 					{didSticksRoll ? (
 						<span className="inline-block rounded p-2 border-2 border-orange-900 border-dotted">
 							{`move ${spacesToMove} space${spacesToMove > 1 ? 's' : ''}`}
@@ -68,9 +70,10 @@ export default function SenetGame() {
 
 interface BoardProps {
 	spaces: Item[];
+	turn: Turn;
 }
 
-function Board({ spaces }: BoardProps) {
+function Board({ spaces, turn }: BoardProps) {
 	return (
 		<section className="mb-6">
 			<h2 className="font-bold text-xl mb-2">Game board</h2>
@@ -86,7 +89,7 @@ function Board({ spaces }: BoardProps) {
 							key={rowNum}
 						>
 							{spaces.slice(indexStart, indexEnd).map((item, i) => (
-								<Space item={item} index={indexStart + i} key={i} />
+								<Space item={item} index={indexStart + i} turn={turn} key={i} />
 							))}
 						</div>
 					);
@@ -99,11 +102,25 @@ function Board({ spaces }: BoardProps) {
 interface SpaceProps {
 	item: Item;
 	index: number;
+	turn: Turn;
 }
 
-function Space({ item, index }: SpaceProps) {
+function Space({ item, index, turn }: SpaceProps) {
+	const isSelectable =
+		(turn === 'black' && item === BLACK_PAWN) ||
+		(turn === 'white' && item === WHITE_PAWN);
+	const notAllowed =
+		(turn === 'black' && item === WHITE_PAWN) ||
+		(turn === 'white' && item === BLACK_PAWN);
+
 	return (
-		<div className="w-24 aspect-square relative grid place-items-center border-2 border-orange-900 text-5xl cursor-pointer select-none">
+		<div
+			className={clsx(
+				'w-24 aspect-square relative grid place-items-center border-2 border-orange-900 text-5xl select-none',
+				isSelectable && 'cursor-pointer',
+				notAllowed && 'cursor-not-allowed'
+			)}
+		>
 			<span className="absolute top-1 right-2 text-sm opacity-90">
 				{index + 1}
 			</span>
