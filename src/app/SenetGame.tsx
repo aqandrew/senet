@@ -35,7 +35,8 @@ export default function SenetGame() {
 	const turn: Turn = turnNum % 2 ? 'black' : 'white';
 	const didSticksRoll = !sticks.every((stick) => stick === null);
 	const spacesToMove =
-		sticks.reduce((total: number, stick) => total + stick!, 0) || 6;
+		sticks.reduce((total: number, stick) => total + stick!, 0) ||
+		(didSticksRoll ? 6 : 0);
 	const turnPawn =
 		turn === 'black' ? BLACK_PAWN : turn === 'white' ? WHITE_PAWN : null;
 	const legalForwardMoves = spaces.map((item, index) => {
