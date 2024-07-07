@@ -25,7 +25,10 @@ export default function Home() {
 				<SenetGame />
 			</main>
 
-			<dialog ref={dialogRef} className="w-96 p-3 rounded">
+			<dialog
+				ref={dialogRef}
+				className="w-96 p-3 rounded bg-orange-200 text-orange-900"
+			>
 				<h2>Rules</h2>
 
 				{RULES.map(({ title, description }, i) => (
