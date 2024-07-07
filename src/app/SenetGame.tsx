@@ -27,16 +27,40 @@ export default function SenetGame() {
 	const [turnNum, setTurnNum] = useState(1);
 	const [sticks, setSticks] = useState<Stick[]>([null, null, null, null]);
 
+	const didSticksRoll = !sticks.every((stick) => stick === null);
+	const spacesToMove =
+		sticks.reduce((total: number, stick) => total + stick!, 0) || 6;
+
+	// fill sticks with random bits
+	function rollSticks() {
+		setSticks(sticks.map((_) => Math.round(Math.random()) as Stick));
+	}
+
 	return (
 		<>
 			<Board spaces={spaces} />
-			<Sticks sticks={sticks} setSticks={setSticks} />
+			<Sticks sticks={sticks} />
 
 			<section className="mb-6">
 				<h2 className="font-bold text-xl mb-2">Game status</h2>
 
 				<p>turn number: {turnNum}</p>
-				<p>{turnNum % 2 ? 'black' : 'white'}'s turn</p>
+				{/* TODO account for extra turns */}
+				<p>
+					{turnNum % 2 ? 'black' : 'white'}'s turn:{' '}
+					{didSticksRoll ? (
+						<span className="inline-block my-2">
+							{`move ${spacesToMove} space${spacesToMove > 1 ? 's' : ''}`}
+						</span>
+					) : (
+						<button
+							className="rounded p-2 bg-gray-200 cursor-pointer"
+							onClick={rollSticks}
+						>
+							Roll sticks
+						</button>
+					)}
+				</p>
 			</section>
 		</>
 	);
@@ -97,28 +121,12 @@ function Space({ item, index }: SpaceProps) {
 
 interface SticksProps {
 	sticks: Stick[];
-	setSticks: Dispatch<SetStateAction<Stick[]>>;
 }
 
-function Sticks({ sticks, setSticks }: SticksProps) {
-	const spacesToMove =
-		sticks.reduce((total: number, stick) => total + stick!, 0) || 6;
-
-	// fill sticks with random bits
-	function rollSticks() {
-		setSticks(sticks.map((_) => Math.round(Math.random()) as Stick));
-	}
-
+function Sticks({ sticks }: SticksProps) {
 	return (
 		<section className="mb-6">
 			<h2 className="font-bold text-xl mb-2">Sticks</h2>
-
-			{/* TODO account for extra turns */}
-			<p>
-				{sticks.every((stick) => stick === null)
-					? 'not yet rolled'
-					: `move ${spacesToMove} space${spacesToMove > 1 ? 's' : ''}`}
-			</p>
 
 			<div className="my-3 flex gap-1">
 				{/* TODO animate sticks rolling */}
@@ -133,13 +141,6 @@ function Sticks({ sticks, setSticks }: SticksProps) {
 					></div>
 				))}
 			</div>
-
-			<button
-				className="rounded p-2 bg-gray-200 cursor-pointer"
-				onClick={rollSticks}
-			>
-				Roll sticks
-			</button>
 		</section>
 	);
 }
