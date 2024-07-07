@@ -102,7 +102,7 @@ export default function SenetGame() {
 						<button onClick={rollSticks}>Roll sticks</button>
 					)}
 				</p>
-				<p>legal forward moves: {JSON.stringify(legalForwardMoves)}</p>
+				{/* <p>legal forward moves: {JSON.stringify(legalForwardMoves)}</p> */}
 			</section>
 		</>
 	);
