@@ -98,7 +98,8 @@ interface SpaceProps {
 
 function Space({ item, index }: SpaceProps) {
 	return (
-		<div className="w-24 aspect-square grid place-items-center border-2 text-5xl cursor-pointer select-none">
+		<div className="w-24 aspect-square relative grid place-items-center border-2 text-5xl cursor-pointer select-none">
+			<span className="absolute top-1 right-2 text-sm">{index + 1}</span>
 			<span className="text-gray-300 row-start-1 row-span-1 col-start-1 col-span-1">
 				{index === HOUSE_OF_REBIRTH ? '☥' : null}
 				{index === SAFE_HOUSE_1 ? '𓄤𓄤𓄤' : null}
