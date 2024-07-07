@@ -101,11 +101,8 @@ interface SticksProps {
 }
 
 function Sticks({ sticks, setSticks }: SticksProps) {
-	// TODO account for extra turns
-	const squaresToMove = sticks.reduce(
-		(total: number, stick) => total + stick!,
-		0
-	);
+	const spacesToMove =
+		sticks.reduce((total: number, stick) => total + stick!, 0) || 6;
 
 	// fill sticks with random bits
 	function rollSticks() {
@@ -114,13 +111,29 @@ function Sticks({ sticks, setSticks }: SticksProps) {
 
 	return (
 		<section className="mb-6">
-			<h2 className="font-bold text-xl mb-2">
-				Sticks:{' '}
+			<h2 className="font-bold text-xl mb-2">Sticks</h2>
+
+			{/* TODO account for extra turns */}
+			<p>
 				{sticks.every((stick) => stick === null)
 					? 'not yet rolled'
-					: squaresToMove}
-			</h2>
-			{/* TODO graphical representation of sticks */}
+					: `move ${spacesToMove} space${spacesToMove > 1 ? 's' : ''}`}
+			</p>
+
+			<div className="my-3 flex gap-1">
+				{/* TODO animate sticks rolling */}
+				{sticks.map((stick, i) => (
+					<div
+						className={clsx(
+							'w-3 h-16 border-2',
+							stick === null && 'bg-gray-200',
+							stick === 0 && 'bg-black'
+						)}
+						key={i}
+					></div>
+				))}
+			</div>
+
 			<button
 				className="rounded p-2 bg-gray-200 cursor-pointer"
 				onClick={rollSticks}
