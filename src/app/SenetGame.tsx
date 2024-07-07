@@ -18,7 +18,7 @@ const SAFE_HOUSE_3 = 28;
 
 type Stick = 0 | 1 | null;
 type Turn = 'black' | 'white';
-type SelectedSpaceIndex = number | null;
+type SpaceIndex = number | null;
 
 export default function SenetGame() {
 	const [spaces, setSpaces] = useState<Item[]>(
@@ -27,7 +27,7 @@ export default function SenetGame() {
 			.map((_, i) => (i < 10 ? (i % 2 ? BLACK_PAWN : WHITE_PAWN) : null))
 	);
 	const [selectedSpaceIndex, setSelectedSpaceIndex] =
-		useState<SelectedSpaceIndex>(null);
+		useState<SpaceIndex>(null);
 	const [turnNum, setTurnNum] = useState(1);
 	const [sticks, setSticks] = useState<Stick[]>([null, null, null, null]);
 
@@ -35,7 +35,6 @@ export default function SenetGame() {
 	const didSticksRoll = !sticks.every((stick) => stick === null);
 	const spacesToMove =
 		sticks.reduce((total: number, stick) => total + stick!, 0) || 6;
-	// TODO solve prop drilling before adding legal move marker to Space
 	const legalForwardMoves = spaces.map((item, index) => {
 		const turnPawn =
 			turn === 'black' ? BLACK_PAWN : turn === 'white' ? WHITE_PAWN : null;
@@ -58,12 +57,15 @@ export default function SenetGame() {
 
 	return (
 		<>
-			{/* TODO solve prop drilling for selectedSpaceIndex into Space */}
+			{/* TODO solve prop drilling for these props into Space:
+						selectedSpaceIndex, setSelectedSpaceIndex, legalForwardMoves
+			 */}
 			<Board
 				spaces={spaces}
 				turn={turn}
 				selectedSpaceIndex={selectedSpaceIndex}
 				setSelectedSpaceIndex={setSelectedSpaceIndex}
+				legalForwardMoves={legalForwardMoves}
 			/>
 			<Sticks sticks={sticks} />
 
@@ -87,6 +89,7 @@ export default function SenetGame() {
 						</button>
 					)}
 				</p>
+				<p>{JSON.stringify(legalForwardMoves)}</p>
 			</section>
 		</>
 	);
@@ -95,8 +98,9 @@ export default function SenetGame() {
 interface BoardProps {
 	spaces: Item[];
 	turn: Turn;
-	selectedSpaceIndex: SelectedSpaceIndex;
-	setSelectedSpaceIndex: Dispatch<SetStateAction<SelectedSpaceIndex>>;
+	selectedSpaceIndex: SpaceIndex;
+	setSelectedSpaceIndex: Dispatch<SetStateAction<SpaceIndex>>;
+	legalForwardMoves: SpaceIndex[];
 }
 
 function Board({
@@ -104,6 +108,7 @@ function Board({
 	turn,
 	selectedSpaceIndex,
 	setSelectedSpaceIndex,
+	legalForwardMoves,
 }: BoardProps) {
 	return (
 		<section className="mb-6">
@@ -126,6 +131,7 @@ function Board({
 									turn={turn}
 									selectedSpaceIndex={selectedSpaceIndex}
 									setSelectedSpaceIndex={setSelectedSpaceIndex}
+									legalForwardMoves={legalForwardMoves}
 									key={i}
 								/>
 							))}
@@ -141,8 +147,9 @@ interface SpaceProps {
 	item: Item;
 	index: number;
 	turn: Turn;
-	selectedSpaceIndex: SelectedSpaceIndex;
-	setSelectedSpaceIndex: Dispatch<SetStateAction<SelectedSpaceIndex>>;
+	selectedSpaceIndex: SpaceIndex;
+	setSelectedSpaceIndex: Dispatch<SetStateAction<SpaceIndex>>;
+	legalForwardMoves: SpaceIndex[];
 }
 
 function Space({
@@ -151,6 +158,7 @@ function Space({
 	turn,
 	selectedSpaceIndex,
 	setSelectedSpaceIndex,
+	legalForwardMoves,
 }: SpaceProps) {
 	const isSelectable =
 		(turn === 'black' && item === BLACK_PAWN) ||
@@ -158,6 +166,8 @@ function Space({
 	const notAllowed =
 		(turn === 'black' && item === WHITE_PAWN) ||
 		(turn === 'white' && item === BLACK_PAWN);
+	const isLegalForwardMoveSpace =
+		selectedSpaceIndex && legalForwardMoves[selectedSpaceIndex] === index;
 
 	function handleClick() {
 		if (isSelectable) {
@@ -200,6 +210,11 @@ function Space({
 			{/* selection marker */}
 			{selectedSpaceIndex === index ? (
 				<span className="absolute w-16 aspect-square border-2 border-orange-900 rounded-full"></span>
+			) : null}
+
+			{/* potential selection marker */}
+			{isLegalForwardMoveSpace ? (
+				<span className="absolute w-16 aspect-square border-2 border-orange-900 border-dashed rounded-full"></span>
 			) : null}
 
 			{/* pawn, if present */}
