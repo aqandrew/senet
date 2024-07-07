@@ -54,7 +54,7 @@ export default function SenetGame() {
 						</span>
 					) : (
 						<button
-							className="rounded p-2 bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+							className="rounded p-2 bg-teal-700 hover:bg-teal-600 text-teal-50 cursor-pointer"
 							onClick={rollSticks}
 						>
 							Roll sticks
@@ -142,9 +142,9 @@ function Sticks({ sticks }: SticksProps) {
 				{sticks.map((stick, i) => (
 					<div
 						className={clsx(
-							'w-3 h-16 border-2',
-							stick === null && 'bg-gray-200',
-							stick === 0 && 'bg-black'
+							'w-3 h-16 border-2 border-orange-900',
+							stick === null && 'bg-orange-900 opacity-30',
+							stick === 0 && 'bg-orange-900'
 						)}
 						key={i}
 					></div>
