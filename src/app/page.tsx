@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import SenetGame from './SenetGame';
+import { RULES } from './rules';
 
 export default function Home() {
 	const dialogRef = useRef<HTMLDialogElement | null>(null);
@@ -24,10 +25,21 @@ export default function Home() {
 				<SenetGame />
 			</main>
 
-			<dialog ref={dialogRef} className="rounded p-2">
-				<p>TODO show rules</p>
+			<dialog ref={dialogRef} className="w-96 p-3 rounded">
+				<h2>Rules</h2>
 
-				<form method="dialog">
+				{RULES.map(({ title, description }, i) => (
+					<details key={i}>
+						<summary className="cursor-pointer">
+							<h3 className="inline">
+								{i + 1}. {title}
+							</h3>
+						</summary>
+						<p className="ml-4 mb-3">{description}</p>
+					</details>
+				))}
+
+				<form method="dialog" className="mt-4 flex justify-end">
 					<button>OK</button>
 				</form>
 			</dialog>

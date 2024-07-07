@@ -88,7 +88,7 @@ export default function SenetGame() {
 			<Sticks sticks={sticks} />
 
 			<section className="mb-6">
-				<h2 className="font-bold text-xl mb-2">Game status</h2>
+				<h2>Game status</h2>
 
 				<p>turn number: {turnNum}</p>
 				{/* TODO account for extra turns */}
@@ -127,7 +127,7 @@ function Board({
 }: BoardProps) {
 	return (
 		<section className="mb-6">
-			<h2 className="font-bold text-xl mb-2">Game board</h2>
+			<h2>Game board</h2>
 
 			<div className="flex flex-col gap-2">
 				{Array.from({ length: NUM_ROWS }).map((_, rowNum) => {
@@ -258,7 +258,7 @@ interface SticksProps {
 function Sticks({ sticks }: SticksProps) {
 	return (
 		<section className="mb-6">
-			<h2 className="font-bold text-xl mb-2">Sticks</h2>
+			<h2>Sticks</h2>
 
 			<div className="my-3 flex gap-1">
 				{/* TODO animate sticks rolling */}
