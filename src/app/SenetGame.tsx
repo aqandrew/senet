@@ -24,7 +24,7 @@ export default function SenetGame() {
 			.fill(null)
 			.map((_, i) => (i < 10 ? (i % 2 ? BLACK_PAWN : WHITE_PAWN) : null))
 	);
-	const [turnNum, setTurnNum] = useState(0);
+	const [turnNum, setTurnNum] = useState(1);
 	const [sticks, setSticks] = useState<Stick[]>([null, null, null, null]);
 
 	return (
@@ -36,7 +36,7 @@ export default function SenetGame() {
 				<h2 className="font-bold text-xl mb-2">Game status</h2>
 
 				<p>turn number: {turnNum}</p>
-				<p>{turnNum % 2 ? 'white' : 'black'}'s turn</p>
+				<p>{turnNum % 2 ? 'black' : 'white'}'s turn</p>
 			</section>
 		</>
 	);
