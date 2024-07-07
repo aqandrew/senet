@@ -54,7 +54,7 @@ export default function SenetGame() {
 						</span>
 					) : (
 						<button
-							className="rounded p-2 bg-gray-200 cursor-pointer"
+							className="rounded p-2 bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
 							onClick={rollSticks}
 						>
 							Roll sticks
@@ -105,7 +105,7 @@ function Space({ item, index }: SpaceProps) {
 	return (
 		<div className="w-24 aspect-square relative grid place-items-center border-2 text-5xl cursor-pointer select-none">
 			<span className="absolute top-1 right-2 text-sm">{index + 1}</span>
-			<span className="text-gray-300 row-start-1 row-span-1 col-start-1 col-span-1">
+			<span className="text-gray-200 row-start-1 row-span-1 col-start-1 col-span-1">
 				{index === HOUSE_OF_REBIRTH ? '☥' : null}
 				{index === SAFE_HOUSE_1 ? '𓄤𓄤𓄤' : null}
 				{index === HOUSE_OF_WATER ? '𓈗' : null}
