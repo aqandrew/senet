@@ -185,17 +185,21 @@ function Space({
 	legalForwardMoves,
 	moveSelectedPiece,
 }: SpaceProps) {
+	const hasLegalForwardMoves = legalForwardMoves[index] !== null;
 	const isLegalForwardMoveSpace =
 		selectedSpaceIndex && legalForwardMoves[selectedSpaceIndex] === index;
-	const isSelectable =
+	const isOwnPiece =
 		(turn === 'black' && item === BLACK_PIECE) ||
 		(turn === 'white' && item === WHITE_PIECE);
-	const notAllowed =
+	const isOpponentPiece =
 		(turn === 'black' && item === WHITE_PIECE) ||
 		(turn === 'white' && item === BLACK_PIECE);
+	const isNotAllowed =
+		(isOwnPiece && !hasLegalForwardMoves) ||
+		(isOpponentPiece && !isLegalForwardMoveSpace);
 
 	function handleClick() {
-		if (isSelectable) {
+		if (!isNotAllowed) {
 			setSelectedSpaceIndex(index);
 		}
 
@@ -208,8 +212,8 @@ function Space({
 		<div
 			className={clsx(
 				'w-24 aspect-square relative grid place-items-center border-2 border-orange-900 text-5xl select-none',
-				(isSelectable || isLegalForwardMoveSpace) && 'cursor-pointer',
-				notAllowed && !isLegalForwardMoveSpace && 'cursor-not-allowed'
+				(isOwnPiece || isLegalForwardMoveSpace) && 'cursor-pointer',
+				isNotAllowed && 'cursor-not-allowed'
 			)}
 			tabIndex={0}
 			onClick={handleClick}
