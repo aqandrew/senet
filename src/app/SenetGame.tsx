@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import clsx from 'clsx';
 
 const NUM_COLUMNS = 10;
@@ -27,59 +27,10 @@ export default function SenetGame() {
 	const [turnNum, setTurnNum] = useState(0);
 	const [sticks, setSticks] = useState<Stick[]>([null, null, null, null]);
 
-	// TODO account for extra turns
-	const squaresToMove = sticks.reduce(
-		(total: number, stick) => total + stick!,
-		0
-	);
-
-	// fill sticks with random bits
-	function rollSticks() {
-		setSticks(sticks.map((_) => Math.round(Math.random()) as Stick));
-	}
-
 	return (
 		<>
-			<section className="mb-6">
-				<h2 className="font-bold text-xl mb-2">Game board</h2>
-
-				<div className="flex flex-col gap-2">
-					{Array.from({ length: NUM_ROWS }).map((_, rowNum) => {
-						const indexStart = rowNum * NUM_COLUMNS;
-						const indexEnd = (rowNum + 1) * NUM_COLUMNS;
-
-						return (
-							<div
-								className={clsx(
-									'flex gap-2',
-									rowNum === 1 && 'flex-row-reverse'
-								)}
-								key={rowNum}
-							>
-								{spaces.slice(indexStart, indexEnd).map((item, i) => (
-									<Space item={item} index={indexStart + i} key={i} />
-								))}
-							</div>
-						);
-					})}
-				</div>
-			</section>
-
-			<section className="mb-6">
-				<h2 className="font-bold text-xl mb-2">
-					Sticks:{' '}
-					{sticks.every((stick) => stick === null)
-						? 'not yet rolled'
-						: squaresToMove}
-				</h2>
-				{/* TODO graphical representation of sticks */}
-				<button
-					className="rounded p-2 bg-gray-200 cursor-pointer"
-					onClick={rollSticks}
-				>
-					Roll sticks
-				</button>
-			</section>
+			<Board spaces={spaces} />
+			<Sticks sticks={sticks} setSticks={setSticks} />
 
 			<section className="mb-6">
 				<h2 className="font-bold text-xl mb-2">Game status</h2>
@@ -88,6 +39,36 @@ export default function SenetGame() {
 				<p>{turnNum % 2 ? 'white' : 'black'}'s turn</p>
 			</section>
 		</>
+	);
+}
+
+interface BoardProps {
+	spaces: Item[];
+}
+
+function Board({ spaces }: BoardProps) {
+	return (
+		<section className="mb-6">
+			<h2 className="font-bold text-xl mb-2">Game board</h2>
+
+			<div className="flex flex-col gap-2">
+				{Array.from({ length: NUM_ROWS }).map((_, rowNum) => {
+					const indexStart = rowNum * NUM_COLUMNS;
+					const indexEnd = (rowNum + 1) * NUM_COLUMNS;
+
+					return (
+						<div
+							className={clsx('flex gap-2', rowNum === 1 && 'flex-row-reverse')}
+							key={rowNum}
+						>
+							{spaces.slice(indexStart, indexEnd).map((item, i) => (
+								<Space item={item} index={indexStart + i} key={i} />
+							))}
+						</div>
+					);
+				})}
+			</div>
+		</section>
 	);
 }
 
@@ -111,5 +92,41 @@ function Space({ item, index }: SpaceProps) {
 				{item}
 			</span>
 		</div>
+	);
+}
+
+interface SticksProps {
+	sticks: Stick[];
+	setSticks: Dispatch<SetStateAction<Stick[]>>;
+}
+
+function Sticks({ sticks, setSticks }: SticksProps) {
+	// TODO account for extra turns
+	const squaresToMove = sticks.reduce(
+		(total: number, stick) => total + stick!,
+		0
+	);
+
+	// fill sticks with random bits
+	function rollSticks() {
+		setSticks(sticks.map((_) => Math.round(Math.random()) as Stick));
+	}
+
+	return (
+		<section className="mb-6">
+			<h2 className="font-bold text-xl mb-2">
+				Sticks:{' '}
+				{sticks.every((stick) => stick === null)
+					? 'not yet rolled'
+					: squaresToMove}
+			</h2>
+			{/* TODO graphical representation of sticks */}
+			<button
+				className="rounded p-2 bg-gray-200 cursor-pointer"
+				onClick={rollSticks}
+			>
+				Roll sticks
+			</button>
+		</section>
 	);
 }
