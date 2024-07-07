@@ -1,5 +1,3 @@
-'use client';
-
 import { Dispatch, SetStateAction, useState } from 'react';
 import clsx from 'clsx';
 
@@ -97,16 +95,11 @@ export default function SenetGame() {
 				<p>
 					{turn}'s turn:{' '}
 					{didSticksRoll ? (
-						<span className="inline-block rounded p-2 border-2 border-orange-900 border-dotted">
+						<span className="inline-block rounded px-2 py-1 border-2 border-orange-900 border-dotted">
 							{`move ${spacesToMove} space${spacesToMove > 1 ? 's' : ''}`}
 						</span>
 					) : (
-						<button
-							className="rounded p-2 border-2 border-teal-700 bg-teal-700 hover:bg-teal-600 text-teal-50 cursor-pointer"
-							onClick={rollSticks}
-						>
-							Roll sticks
-						</button>
+						<button onClick={rollSticks}>Roll sticks</button>
 					)}
 				</p>
 				<p>legal forward moves: {JSON.stringify(legalForwardMoves)}</p>
