@@ -24,7 +24,7 @@
 
 6. If You Cannot Move
 
-   If you can't move any pieces forward, you must move one backward. If you move backward and your piece lands on a square occupied by an opponent's piece, the opponent's piece moves forward to the space your piece just left. If you cannot move a piece forward or backward on a row, your turn ends.
+   If you can't move any pieces forward, you must move one backward. If you move backward and your piece lands on a square occupied by an opponent's piece, the opponent's piece moves forward to the space your piece just left. If you cannot move a piece forward or backward on a roll, your turn ends.
 
 7. The Water Trap
 
