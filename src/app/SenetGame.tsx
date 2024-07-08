@@ -36,6 +36,7 @@ export default function SenetGame() {
 	const spacesToMove =
 		sticks.reduce((total: number, stick) => total + stick!, 0) ||
 		(didSticksRoll ? 6 : 0);
+	const didGetExtraRoll = [1, 4, 6].includes(spacesToMove);
 	const turnPiece =
 		turn === 'black' ? BLACK_PIECE : turn === 'white' ? WHITE_PIECE : null;
 	const opponentPiece = turn === 'black' ? WHITE_PIECE : BLACK_PIECE;
@@ -86,7 +87,12 @@ export default function SenetGame() {
 		newSpaces[index] = turnPiece;
 		setSpaces(newSpaces);
 
-		nextTurn();
+		if (didGetExtraRoll) {
+			setSelectedSpaceIndex(null);
+			setSticks(INITIAL_STICKS);
+		} else {
+			nextTurn();
+		}
 	}
 
 	return (
@@ -116,7 +122,6 @@ export default function SenetGame() {
 				<h2>Game status</h2>
 
 				<p>Turn number: {turnNum}</p>
-				{/* TODO account for extra turns */}
 				<p className="inline-flex items-center gap-2">
 					{toSentenceCase(turn)}'s turn:
 					{didSticksRoll ? (
@@ -138,6 +143,10 @@ export default function SenetGame() {
 						<button onClick={rollSticks}>Roll sticks</button>
 					)}
 				</p>
+				{didGetExtraRoll ? (
+					// TODO maybe this copy / rules should say `Make an extra *roll*`
+					<p>Rolled a {spacesToMove} → Take an extra turn</p>
+				) : null}
 				{/* <p>legal forward moves: {JSON.stringify(legalForwardMoves)}</p> */}
 			</section>
 		</>
