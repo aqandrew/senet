@@ -235,7 +235,7 @@ function Space({
 			: 'col-start-1';
 
 	function handleClick() {
-		if (!isNotAllowed) {
+		if (isSelectable) {
 			setSelectedSpaceIndex(index);
 		}
 
