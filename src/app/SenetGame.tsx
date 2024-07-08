@@ -47,20 +47,36 @@ export default function SenetGame() {
 	// TODO water trap
 	// TODO safe squares
 	const legalForwardMoves = spaces.map((item, index) => {
-		// TODO account for the following conditions:
-		//   - 3 pieces in a row can't be attacked or passed
 		if (item === turnPiece) {
 			const possibleForwardIndex = index + spacesToMove;
 			const isOpponentPieceGuarded =
 				spaces[possibleForwardIndex - 1] === opponentPiece ||
 				spaces[possibleForwardIndex + 1] === opponentPiece;
+			const isPathBlocked = (() => {
+				let numAdjacentOpponentPieces = 0;
+
+				for (let i = index; i < possibleForwardIndex; i++) {
+					if (spaces[i] === opponentPiece) {
+						numAdjacentOpponentPieces++;
+					} else {
+						numAdjacentOpponentPieces = 0;
+					}
+
+					if (numAdjacentOpponentPieces === 3) {
+						return true;
+					}
+				}
+
+				return false;
+			})();
 
 			if (
 				spaces[possibleForwardIndex] !== turnPiece &&
 				!(
 					spaces[possibleForwardIndex] === opponentPiece &&
 					isOpponentPieceGuarded
-				)
+				) &&
+				!isPathBlocked
 			) {
 				return possibleForwardIndex;
 			}
