@@ -129,31 +129,19 @@ function Board({
 		<section className="mb-6">
 			<h2>Game board</h2>
 
-			<div className="flex flex-col gap-2">
-				{Array.from({ length: NUM_ROWS }).map((_, rowNum) => {
-					const indexStart = rowNum * NUM_COLUMNS;
-					const indexEnd = (rowNum + 1) * NUM_COLUMNS;
-
-					return (
-						<div
-							className={clsx('flex gap-2', rowNum === 1 && 'flex-row-reverse')}
-							key={rowNum}
-						>
-							{spaces.slice(indexStart, indexEnd).map((item, i) => (
-								<Space
-									item={item}
-									index={indexStart + i}
-									turn={turn}
-									selectedSpaceIndex={selectedSpaceIndex}
-									setSelectedSpaceIndex={setSelectedSpaceIndex}
-									legalForwardMoves={legalForwardMoves}
-									moveSelectedPiece={moveSelectedPiece}
-									key={i}
-								/>
-							))}
-						</div>
-					);
-				})}
+			<div className="grid grid-cols-10 gap-2">
+				{spaces.map((item, index) => (
+					<Space
+						item={item}
+						index={index}
+						turn={turn}
+						selectedSpaceIndex={selectedSpaceIndex}
+						setSelectedSpaceIndex={setSelectedSpaceIndex}
+						legalForwardMoves={legalForwardMoves}
+						moveSelectedPiece={moveSelectedPiece}
+						key={index}
+					/>
+				))}
 			</div>
 		</section>
 	);
@@ -190,6 +178,28 @@ function Space({
 	const isNotAllowed =
 		(isOwnPiece && !hasLegalForwardMoves) ||
 		(isOpponentPiece && !isLegalForwardMoveSpace);
+	const isMiddleRow = index >= NUM_COLUMNS && index < 2 * NUM_COLUMNS;
+	// Tailwind can't find class names that are dynamically generated
+	const middleRowColumnClass =
+		index === 10
+			? 'col-start-10'
+			: index === 11
+			? 'col-start-9'
+			: index === 12
+			? 'col-start-8'
+			: index === 13
+			? 'col-start-7'
+			: index === 14
+			? 'col-start-6'
+			: index === 15
+			? 'col-start-5'
+			: index === 16
+			? 'col-start-4'
+			: index === 17
+			? 'col-start-3'
+			: index === 18
+			? 'col-start-2'
+			: 'col-start-1';
 
 	function handleClick() {
 		if (!isNotAllowed) {
@@ -205,6 +215,8 @@ function Space({
 		<div
 			className={clsx(
 				'w-24 aspect-square relative grid place-items-center border-2 border-orange-900 text-5xl select-none',
+				isMiddleRow && middleRowColumnClass,
+				isMiddleRow && 'row-start-2',
 				(isOwnPiece || isLegalForwardMoveSpace) && 'cursor-pointer',
 				isNotAllowed && 'cursor-not-allowed'
 			)}
