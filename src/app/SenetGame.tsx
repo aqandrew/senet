@@ -39,6 +39,12 @@ export default function SenetGame() {
 	const turnPiece =
 		turn === 'black' ? BLACK_PIECE : turn === 'white' ? WHITE_PIECE : null;
 	const opponentPiece = turn === 'black' ? WHITE_PIECE : BLACK_PIECE;
+	// TODO ability to move pieces off the board, when all of your pieces are out of the first row;
+	//   includes using roll remainder to move another piece
+	// TODO move backwards if there are no legal forward moves;
+	//   if there are no backward moves, only then would a turn be skipped
+	// TODO water trap
+	// TODO safe squares
 	const legalForwardMoves = spaces.map((item, index) => {
 		// TODO account for the following conditions:
 		//   - 3 pieces in a row can't be attacked or passed

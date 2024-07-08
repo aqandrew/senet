@@ -42,6 +42,6 @@ export const RULES = [
 	{
 		title: 'Bearing Off Your Pieces',
 		description:
-			'If you move a piece off the bottom row, then that piece is taken off the board. If you roll a number greater than needed to move a piece off the board, you may use the remainder of that row to move another of your pieces.',
+			'If you move a piece off the bottom row, then that piece is taken off the board. If you roll a number greater than needed to move a piece off the board, you may use the remainder of that roll to move another of your pieces.',
 	},
 ];
