@@ -44,8 +44,8 @@ export default function SenetGame() {
 		if (item === turnPiece) {
 			const possibleForwardIndex = index + spacesToMove;
 			const isOpponentPieceGuarded =
-				spaces[possibleForwardIndex - 1] !== turnPiece ||
-				spaces[possibleForwardIndex + 1] !== turnPiece;
+				spaces[possibleForwardIndex - 1] === opponentPiece ||
+				spaces[possibleForwardIndex + 1] === opponentPiece;
 
 			if (
 				spaces[possibleForwardIndex] !== turnPiece &&
