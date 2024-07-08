@@ -43,7 +43,6 @@ export default function SenetGame() {
 	//   includes using roll remainder to move another piece
 	// TODO move backwards if there are no legal forward moves;
 	//   if there are no backward moves, only then would a turn be skipped
-	// TODO water trap
 	// TODO safe squares
 	const legalForwardMoves = spaces.map((item, index) => {
 		if (item === turnPiece) {
@@ -96,10 +95,21 @@ export default function SenetGame() {
 		setSticks(INITIAL_STICKS);
 	}
 
-	function moveSelectedPiece(index: number) {
+	function moveSelectedPiece(targetIndex: number) {
 		const newSpaces = [...spaces];
-		newSpaces[selectedSpaceIndex!] = newSpaces[index];
-		newSpaces[index] = turnPiece;
+
+		// send piece back to House of Rebirth if it lands in House of Water
+		if (targetIndex === HOUSE_OF_WATER) {
+			targetIndex = HOUSE_OF_REBIRTH;
+
+			// send piece back to the beginning (or closest empty space) if House of Rebirth is occupied
+			if (spaces[HOUSE_OF_REBIRTH]) {
+				targetIndex = spaces.findIndex((space) => space === null);
+			}
+		}
+
+		newSpaces[selectedSpaceIndex!] = newSpaces[targetIndex];
+		newSpaces[targetIndex] = turnPiece;
 		setSpaces(newSpaces);
 
 		if (didGetExtraRoll) {
