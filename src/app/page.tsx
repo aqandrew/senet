@@ -26,10 +26,7 @@ export default function Home() {
 				<SenetGame />
 			</main>
 
-			<dialog
-				ref={dialogRef}
-				className="w-96 p-3 rounded bg-orange-200 text-orange-900"
-			>
+			<dialog ref={dialogRef}>
 				<h2>Rules</h2>
 
 				{/* TODO un-strikethrough rules for If You Cannot Move and Safe Squares once they're implemented */}
@@ -47,7 +44,7 @@ export default function Home() {
 					</details>
 				))}
 
-				<form method="dialog" className="mt-4 flex justify-end">
+				<form method="dialog">
 					<button>OK</button>
 				</form>
 			</dialog>

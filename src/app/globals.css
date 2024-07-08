@@ -16,8 +16,14 @@
 	}
 
 	dialog {
+		@apply w-96 p-3 rounded bg-orange-200 text-orange-900;
+
 		&::backdrop {
 			@apply bg-orange-950 opacity-50;
+		}
+
+		form[method='dialog'] {
+			@apply mt-4 flex justify-end;
 		}
 	}
 }

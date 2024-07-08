@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { toSentenceCase } from './utils';
 
@@ -8,6 +8,9 @@ const NUM_SPACES = 30;
 const BLACK_PIECE = '♟';
 const WHITE_PIECE = '♙';
 type Item = typeof BLACK_PIECE | typeof WHITE_PIECE | null;
+const INITIAL_SPACES = new Array(NUM_SPACES)
+	.fill(null)
+	.map((_, i) => (i < 10 ? (i % 2 ? BLACK_PIECE : WHITE_PIECE) : null));
 
 const HOUSE_OF_REBIRTH = 14;
 const SAFE_HOUSE_1 = 25;
@@ -21,17 +24,33 @@ type Turn = 'black' | 'white';
 type SpaceIndex = number | null;
 
 export default function SenetGame() {
-	const [spaces, setSpaces] = useState<Item[]>(
-		new Array(NUM_SPACES)
-			.fill(null)
-			.map((_, i) => (i < 10 ? (i % 2 ? BLACK_PIECE : WHITE_PIECE) : null))
-	);
+	const [spaces, setSpaces] = useState<Item[]>(INITIAL_SPACES);
 	const [selectedSpaceIndex, setSelectedSpaceIndex] =
 		useState<SpaceIndex>(null);
 	const [turnNum, setTurnNum] = useState(1);
 	const [sticks, setSticks] = useState<Stick[]>(INITIAL_STICKS);
 	const [remainderSpacesToMove, setRemainderSpacesToMove] = useState(0);
+	const dialogRef = useRef<HTMLDialogElement | null>(null);
 
+	function resetGame() {
+		setSpaces(INITIAL_SPACES);
+		setSelectedSpaceIndex(null);
+		setTurnNum(1);
+		setSticks(INITIAL_STICKS);
+		setRemainderSpacesToMove(0);
+	}
+
+	// check win conditions
+	const didBlackWin = !spaces.includes(BLACK_PIECE);
+	const didWhiteWin = !spaces.includes(WHITE_PIECE);
+
+	if (didBlackWin || didWhiteWin) {
+		if (dialogRef.current) {
+			dialogRef.current.showModal();
+		}
+	}
+
+	// if nobody won yet, work out turn logic
 	const turn: Turn = turnNum % 2 ? 'black' : 'white';
 	const didSticksRoll = !sticks.every((stick) => stick === null);
 	const spacesToMove =
@@ -217,6 +236,16 @@ export default function SenetGame() {
 				) : null}
 				{/* <p>legal forward moves: {JSON.stringify(legalForwardMoves)}</p> */}
 			</section>
+
+			<dialog ref={dialogRef}>
+				<h2>{didBlackWin ? 'Black wins!' : 'White wins!'}</h2>
+
+				<p>Play again?</p>
+
+				<form method="dialog">
+					<button onClick={resetGame}>OK</button>
+				</form>
+			</dialog>
 		</>
 	);
 }
