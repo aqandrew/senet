@@ -37,15 +37,24 @@ export default function SenetGame() {
 		(didSticksRoll ? 6 : 0);
 	const turnPiece =
 		turn === 'black' ? BLACK_PIECE : turn === 'white' ? WHITE_PIECE : null;
+	const opponentPiece = turn === 'black' ? WHITE_PIECE : BLACK_PIECE;
 	const legalForwardMoves = spaces.map((item, index) => {
 		// TODO account for the following conditions:
-		//   - 2 pieces in a row can't be attacked
 		//   - 3 pieces in a row can't be attacked or passed
 		if (item === turnPiece) {
-			const possibleForwardSpace = index + spacesToMove;
+			const possibleForwardIndex = index + spacesToMove;
+			const isOpponentPieceGuarded =
+				spaces[possibleForwardIndex - 1] !== turnPiece ||
+				spaces[possibleForwardIndex + 1] !== turnPiece;
 
-			if (spaces[possibleForwardSpace] !== turnPiece) {
-				return possibleForwardSpace;
+			if (
+				spaces[possibleForwardIndex] !== turnPiece &&
+				!(
+					spaces[possibleForwardIndex] === opponentPiece &&
+					isOpponentPieceGuarded
+				)
+			) {
+				return possibleForwardIndex;
 			}
 		}
 
