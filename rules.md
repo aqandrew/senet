@@ -2,6 +2,8 @@
 
 (adapted from [Pyramid: Challenge of the Pharaoh's Dream](https://youtu.be/OqVGvAXXc3o?si=cWd1_X4B6gvOlPeV&t=3105))
 
+Rules 6 and 8 not supported yet!
+
 1. Object of the Game
 
    Your goal is to move all your pieces off the end of the board before your opponent does. You can move your pieces from left to right on the back row, right to left on the middle row, and left to right on the front row. You cannot move pieces off the board until all of your pieces are out of the first row.
@@ -24,7 +26,7 @@
 
 6. If You Cannot Move
 
-   If you can't move any pieces forward, you must move one backward. If you move backward and your piece lands on a square occupied by an opponent's piece, the opponent's piece moves forward to the space your piece just left. If you cannot move a piece forward or backward on a roll, your turn ends.
+   ~~If you can't move any pieces forward, you must move one backward. If you move backward and your piece lands on a square occupied by an opponent's piece, the opponent's piece moves forward to the space your piece just left. If you cannot move a piece forward or backward on a roll, your turn ends.~~
 
 7. The Water Trap
 
@@ -32,7 +34,7 @@
 
 8. Safe Squares
 
-   There are three squares with symbols in them that surround the water trap. These are safe squares, and your piece cannot be attacked here. If you land on a safe square that is occupied, you'll move back to the nearest open square. You can then use the remainder of your throw on another piece.
+   ~~There are three squares with symbols in them that surround the water trap. These are safe squares, and your piece cannot be attacked here. If you land on a safe square that is occupied, you'll move back to the nearest open square. You can then use the remainder of your throw on another piece.~~
 
 9. Bearing Off Your Pieces
 

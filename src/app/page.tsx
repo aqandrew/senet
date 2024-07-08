@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import clsx from 'clsx';
 import SenetGame from './SenetGame';
 import { RULES } from './rules';
 
@@ -31,8 +32,12 @@ export default function Home() {
 			>
 				<h2>Rules</h2>
 
+				{/* TODO un-strikethrough rules for If You Cannot Move and Safe Squares once they're implemented */}
 				{RULES.map(({ title, description }, i) => (
-					<details key={i}>
+					<details
+						className={clsx((i === 5 || i === 7) && 'line-through')}
+						key={i}
+					>
 						<summary className="cursor-pointer">
 							<h3 className="inline">
 								{i + 1}. {title}
