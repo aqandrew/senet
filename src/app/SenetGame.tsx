@@ -74,17 +74,25 @@ export default function SenetGame() {
 
 	return (
 		<>
-			{/* TODO solve prop drilling for these props into Space:
-						selectedSpaceIndex, setSelectedSpaceIndex, legalForwardMoves, moveSelectedPiece
-			 */}
-			<Board
-				spaces={spaces}
-				turn={turn}
-				selectedSpaceIndex={selectedSpaceIndex}
-				setSelectedSpaceIndex={setSelectedSpaceIndex}
-				legalForwardMoves={legalForwardMoves}
-				moveSelectedPiece={moveSelectedPiece}
-			/>
+			<section className="mb-6">
+				<h2>Game board</h2>
+
+				<div className="grid grid-cols-10 gap-2">
+					{spaces.map((item, index) => (
+						<Space
+							item={item}
+							index={index}
+							turn={turn}
+							selectedSpaceIndex={selectedSpaceIndex}
+							setSelectedSpaceIndex={setSelectedSpaceIndex}
+							legalForwardMoves={legalForwardMoves}
+							moveSelectedPiece={moveSelectedPiece}
+							key={index}
+						/>
+					))}
+				</div>
+			</section>
+
 			<Sticks sticks={sticks} />
 
 			<section className="mb-6">
@@ -105,45 +113,6 @@ export default function SenetGame() {
 				{/* <p>legal forward moves: {JSON.stringify(legalForwardMoves)}</p> */}
 			</section>
 		</>
-	);
-}
-
-interface BoardProps {
-	spaces: Item[];
-	turn: Turn;
-	selectedSpaceIndex: SpaceIndex;
-	setSelectedSpaceIndex: Dispatch<SetStateAction<SpaceIndex>>;
-	legalForwardMoves: SpaceIndex[];
-	moveSelectedPiece: (index: number) => void;
-}
-
-function Board({
-	spaces,
-	turn,
-	selectedSpaceIndex,
-	setSelectedSpaceIndex,
-	legalForwardMoves,
-	moveSelectedPiece,
-}: BoardProps) {
-	return (
-		<section className="mb-6">
-			<h2>Game board</h2>
-
-			<div className="grid grid-cols-10 gap-2">
-				{spaces.map((item, index) => (
-					<Space
-						item={item}
-						index={index}
-						turn={turn}
-						selectedSpaceIndex={selectedSpaceIndex}
-						setSelectedSpaceIndex={setSelectedSpaceIndex}
-						legalForwardMoves={legalForwardMoves}
-						moveSelectedPiece={moveSelectedPiece}
-						key={index}
-					/>
-				))}
-			</div>
-		</section>
 	);
 }
 
