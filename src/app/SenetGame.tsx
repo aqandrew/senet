@@ -60,6 +60,7 @@ export default function SenetGame() {
 
 		return null;
 	});
+	const noLegalForwardMoves = legalForwardMoves.every((move) => move === null);
 
 	// fill sticks with random bits
 	function rollSticks() {
@@ -109,12 +110,23 @@ export default function SenetGame() {
 
 				<p>turn number: {turnNum}</p>
 				{/* TODO account for extra turns */}
-				<p>
-					{turn}'s turn:{' '}
+				<p className="inline-flex items-center gap-2">
+					{turn}'s turn:
 					{didSticksRoll ? (
-						<span className="inline-block rounded px-2 py-1 border-2 border-orange-900 border-dotted">
-							{`move ${spacesToMove} space${spacesToMove > 1 ? 's' : ''}`}
-						</span>
+						<>
+							<span
+								className={clsx(
+									'inline-block rounded px-2 py-1 border-2 border-orange-900 border-dotted',
+									noLegalForwardMoves && 'line-through'
+								)}
+							>
+								{`move ${spacesToMove} space${spacesToMove > 1 ? 's' : ''}`}
+							</span>
+
+							{noLegalForwardMoves ? (
+								<button onClick={nextTurn}>skip turn</button>
+							) : null}
+						</>
 					) : (
 						<button onClick={rollSticks}>Roll sticks</button>
 					)}
