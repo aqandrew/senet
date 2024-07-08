@@ -159,7 +159,8 @@ function Space({
 }: SpaceProps) {
 	const hasLegalForwardMoves = legalForwardMoves[index] !== null;
 	const isLegalForwardMoveSpace =
-		selectedSpaceIndex && legalForwardMoves[selectedSpaceIndex] === index;
+		selectedSpaceIndex !== null &&
+		legalForwardMoves[selectedSpaceIndex] === index;
 	const isOwnPiece =
 		(turn === 'black' && item === BLACK_PIECE) ||
 		(turn === 'white' && item === WHITE_PIECE);
