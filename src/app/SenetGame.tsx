@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { toSentenceCase } from './utils';
 
 const NUM_COLUMNS = 10;
-const NUM_ROWS = 3;
 
 const BLACK_PIECE = '♟';
 const WHITE_PIECE = '♙';
