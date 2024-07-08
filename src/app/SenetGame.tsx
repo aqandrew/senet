@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import clsx from 'clsx';
+import { toSentenceCase } from './utils';
 
 const NUM_COLUMNS = 10;
 const NUM_ROWS = 3;
@@ -108,10 +109,10 @@ export default function SenetGame() {
 			<section className="mb-6">
 				<h2>Game status</h2>
 
-				<p>turn number: {turnNum}</p>
+				<p>Turn number: {turnNum}</p>
 				{/* TODO account for extra turns */}
 				<p className="inline-flex items-center gap-2">
-					{turn}'s turn:
+					{toSentenceCase(turn)}'s turn:
 					{didSticksRoll ? (
 						<>
 							<span
@@ -120,11 +121,11 @@ export default function SenetGame() {
 									noLegalForwardMoves && 'line-through'
 								)}
 							>
-								{`move ${spacesToMove} space${spacesToMove > 1 ? 's' : ''}`}
+								{`Move ${spacesToMove} space${spacesToMove > 1 ? 's' : ''}`}
 							</span>
 
 							{noLegalForwardMoves ? (
-								<button onClick={nextTurn}>skip turn</button>
+								<button onClick={nextTurn}>Skip turn</button>
 							) : null}
 						</>
 					) : (
