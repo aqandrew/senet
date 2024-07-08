@@ -170,6 +170,7 @@ function Space({
 	const isNotAllowed =
 		(isOwnPiece && !hasLegalForwardMoves) ||
 		(isOpponentPiece && !isLegalForwardMoveSpace);
+	const isSelectable = !isNotAllowed && (isOwnPiece || isLegalForwardMoveSpace);
 	const isMiddleRow = index >= NUM_COLUMNS && index < 2 * NUM_COLUMNS;
 	// Tailwind can't find class names that are dynamically generated
 	const middleRowColumnClass =
@@ -209,10 +210,10 @@ function Space({
 				'w-24 aspect-square relative grid place-items-center border-2 border-orange-900 text-5xl select-none',
 				isMiddleRow && middleRowColumnClass,
 				isMiddleRow && 'row-start-2',
-				(isOwnPiece || isLegalForwardMoveSpace) && 'cursor-pointer',
+				isSelectable && 'cursor-pointer',
 				isNotAllowed && 'cursor-not-allowed'
 			)}
-			tabIndex={0}
+			tabIndex={isSelectable ? 0 : -1}
 			onClick={handleClick}
 		>
 			{/* space number */}
