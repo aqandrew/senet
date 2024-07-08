@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { toSentenceCase } from './utils';
 
 const NUM_COLUMNS = 10;
+const NUM_SPACES = 30;
 
 const BLACK_PIECE = '♟';
 const WHITE_PIECE = '♙';
@@ -21,7 +22,7 @@ type SpaceIndex = number | null;
 
 export default function SenetGame() {
 	const [spaces, setSpaces] = useState<Item[]>(
-		new Array(30)
+		new Array(NUM_SPACES)
 			.fill(null)
 			.map((_, i) => (i < 10 ? (i % 2 ? BLACK_PIECE : WHITE_PIECE) : null))
 	);
@@ -29,18 +30,19 @@ export default function SenetGame() {
 		useState<SpaceIndex>(null);
 	const [turnNum, setTurnNum] = useState(1);
 	const [sticks, setSticks] = useState<Stick[]>(INITIAL_STICKS);
+	const [remainderSpacesToMove, setRemainderSpacesToMove] = useState(0);
 
 	const turn: Turn = turnNum % 2 ? 'black' : 'white';
 	const didSticksRoll = !sticks.every((stick) => stick === null);
 	const spacesToMove =
+		remainderSpacesToMove ||
 		sticks.reduce((total: number, stick) => total + stick!, 0) ||
 		(didSticksRoll ? 6 : 0);
-	const didGetExtraRoll = [1, 4, 6].includes(spacesToMove);
+	const didGetExtraRoll =
+		spacesToMove !== remainderSpacesToMove && [1, 4, 6].includes(spacesToMove);
 	const turnPiece =
 		turn === 'black' ? BLACK_PIECE : turn === 'white' ? WHITE_PIECE : null;
 	const opponentPiece = turn === 'black' ? WHITE_PIECE : BLACK_PIECE;
-	// TODO ability to move pieces off the board, when all of your pieces are out of the first row;
-	//   includes using roll remainder to move another piece
 	// TODO move backwards if there are no legal forward moves;
 	//   if there are no backward moves, only then would a turn be skipped
 	// TODO safe squares
@@ -67,6 +69,10 @@ export default function SenetGame() {
 
 				return false;
 			})();
+			const isPieceAllowedToBeRemovedIfPossible = !(
+				possibleForwardIndex >= NUM_SPACES &&
+				spaces.slice(0, NUM_COLUMNS).includes(turnPiece)
+			);
 
 			if (
 				spaces[possibleForwardIndex] !== turnPiece &&
@@ -74,7 +80,8 @@ export default function SenetGame() {
 					spaces[possibleForwardIndex] === opponentPiece &&
 					isOpponentPieceGuarded
 				) &&
-				!isPathBlocked
+				!isPathBlocked &&
+				isPieceAllowedToBeRemovedIfPossible
 			) {
 				return possibleForwardIndex;
 			}
@@ -83,6 +90,8 @@ export default function SenetGame() {
 		return null;
 	});
 	const noLegalForwardMoves = legalForwardMoves.every((move) => move === null);
+	const canRemoveSelectedPiece =
+		legalForwardMoves[selectedSpaceIndex!]! >= NUM_SPACES;
 
 	// fill sticks with random bits
 	function rollSticks() {
@@ -97,6 +106,7 @@ export default function SenetGame() {
 
 	function moveSelectedPiece(targetIndex: number) {
 		const newSpaces = [...spaces];
+		let newRemainderSpacesToMove = 0;
 
 		// send piece back to House of Rebirth if it lands in House of Water
 		if (targetIndex === HOUSE_OF_WATER) {
@@ -108,11 +118,23 @@ export default function SenetGame() {
 			}
 		}
 
-		newSpaces[selectedSpaceIndex!] = newSpaces[targetIndex];
-		newSpaces[targetIndex] = turnPiece;
+		// removing a piece from the board
+		if (targetIndex === NUM_SPACES) {
+			const possibleOverflowIndex = selectedSpaceIndex! + spacesToMove;
+			newSpaces[selectedSpaceIndex!] = null;
+			newRemainderSpacesToMove = possibleOverflowIndex % NUM_SPACES;
+			setRemainderSpacesToMove(newRemainderSpacesToMove);
+		}
+		// normal move
+		else {
+			newSpaces[selectedSpaceIndex!] = newSpaces[targetIndex];
+			newSpaces[targetIndex] = turnPiece;
+			setRemainderSpacesToMove(0);
+		}
+
 		setSpaces(newSpaces);
 
-		if (didGetExtraRoll) {
+		if (didGetExtraRoll || newRemainderSpacesToMove) {
 			setSelectedSpaceIndex(null);
 			setSticks(INITIAL_STICKS);
 		} else {
@@ -125,7 +147,7 @@ export default function SenetGame() {
 			<section className="mb-6">
 				<h2>Game board</h2>
 
-				<div className="grid grid-cols-10 gap-2">
+				<div className="grid grid-cols-10 gap-2 relative">
 					{spaces.map((item, index) => (
 						<Space
 							item={item}
@@ -135,9 +157,25 @@ export default function SenetGame() {
 							setSelectedSpaceIndex={setSelectedSpaceIndex}
 							legalForwardMoves={legalForwardMoves}
 							moveSelectedPiece={moveSelectedPiece}
+							canRemoveSelectedPiece={canRemoveSelectedPiece}
 							key={index}
 						/>
 					))}
+
+					{canRemoveSelectedPiece ? (
+						<div className="absolute bottom-0 left-[calc(100%_+_0.5rem)]">
+							<Space
+								item={null}
+								index={NUM_SPACES}
+								turn={turn}
+								selectedSpaceIndex={selectedSpaceIndex}
+								setSelectedSpaceIndex={setSelectedSpaceIndex}
+								legalForwardMoves={legalForwardMoves}
+								moveSelectedPiece={moveSelectedPiece}
+								canRemoveSelectedPiece={canRemoveSelectedPiece}
+							/>
+						</div>
+					) : null}
 				</div>
 			</section>
 
@@ -164,6 +202,11 @@ export default function SenetGame() {
 								<button onClick={nextTurn}>Skip turn</button>
 							) : null}
 						</>
+					) : remainderSpacesToMove ? (
+						<span className="inline-block rounded px-2 py-1 border-2 border-orange-900 border-dotted">
+							Move {remainderSpacesToMove} more space
+							{remainderSpacesToMove > 1 ? 's' : ''}
+						</span>
 					) : (
 						<button onClick={rollSticks}>Roll sticks</button>
 					)}
@@ -186,6 +229,7 @@ interface SpaceProps {
 	setSelectedSpaceIndex: Dispatch<SetStateAction<SpaceIndex>>;
 	legalForwardMoves: SpaceIndex[];
 	moveSelectedPiece: (index: number) => void;
+	canRemoveSelectedPiece: boolean;
 }
 
 function Space({
@@ -196,11 +240,13 @@ function Space({
 	setSelectedSpaceIndex,
 	legalForwardMoves,
 	moveSelectedPiece,
+	canRemoveSelectedPiece,
 }: SpaceProps) {
 	const hasLegalForwardMoves = legalForwardMoves[index] !== null;
 	const isLegalForwardMoveSpace =
-		selectedSpaceIndex !== null &&
-		legalForwardMoves[selectedSpaceIndex] === index;
+		(selectedSpaceIndex !== null &&
+			legalForwardMoves[selectedSpaceIndex] === index) ||
+		(index === NUM_SPACES && canRemoveSelectedPiece);
 	const isOwnPiece =
 		(turn === 'black' && item === BLACK_PIECE) ||
 		(turn === 'white' && item === WHITE_PIECE);
@@ -257,9 +303,11 @@ function Space({
 			onClick={handleClick}
 		>
 			{/* space number */}
-			<span className="absolute top-1 right-2 text-sm opacity-90">
-				{index + 1}
-			</span>
+			{index < NUM_SPACES ? (
+				<span className="absolute top-1 right-2 text-sm opacity-90">
+					{index + 1}
+				</span>
+			) : null}
 
 			{/* space symbol */}
 			<span
