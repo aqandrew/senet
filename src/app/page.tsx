@@ -29,12 +29,8 @@ export default function Home() {
 			<dialog ref={dialogRef}>
 				<h2>Rules</h2>
 
-				{/* TODO un-strikethrough rules for If You Cannot Move and Safe Squares once they're implemented */}
 				{RULES.map(({ title, description }, i) => (
-					<details
-						className={clsx((i === 5 || i === 7) && 'line-through')}
-						key={i}
-					>
+					<details key={i}>
 						<summary className="cursor-pointer">
 							<h3 className="inline">
 								{i + 1}. {title}

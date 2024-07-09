@@ -24,21 +24,26 @@ export const RULES = [
 		description:
 			"If you put two of your pieces together side by side, they protect each other from being attacked. If you line up three of your pieces in a row, this forms a block--the opponent's pieces cannot pass your block and they can't attack it either.",
 	},
+	// {
+	// 	title: 'If You Cannot Move',
+	// 	description:
+	// 		"If you can't move any pieces forward, you must move one backward. If you move backward and your piece lands on a square occupied by an opponent's piece, the opponent's piece moves forward to the space your piece just left. If you cannot move a piece forward or backward on a roll, your turn ends.",
+	// },
 	{
 		title: 'If You Cannot Move',
 		description:
-			"If you can't move any pieces forward, you must move one backward. If you move backward and your piece lands on a square occupied by an opponent's piece, the opponent's piece moves forward to the space your piece just left. If you cannot move a piece forward or backward on a roll, your turn ends.",
+			'If you cannot move a piece forward on a roll, your turn ends.',
 	},
 	{
 		title: 'The Water Trap',
 		description:
 			'Square 27, the water square, is a trap. A piece that lands on this square must go back to square 15 in the middle of the board. If square 15 is occupied, then you must move back to square 1. If square 1 is occupied, your piece goes to the unoccupied square nearest to square 1.',
 	},
-	{
-		title: 'Safe Squares',
-		description:
-			"There are three squares with symbols in them that surround the water trap. These are safe squares, and your piece cannot be attacked here. If you land on a safe square that is occupied, you'll move back to the nearest open square. You can then use the remainder of your throw on another piece.",
-	},
+	// {
+	// 	title: 'Safe Squares',
+	// 	description:
+	// 		"There are three squares with symbols in them that surround the water trap. These are safe squares, and your piece cannot be attacked here. If you land on a safe square that is occupied, you'll move back to the nearest open square. You can then use the remainder of your throw on another piece.",
+	// },
 	{
 		title: 'Bearing Off Your Pieces',
 		description:
