@@ -322,6 +322,7 @@ function Space({
 	return (
 		<div
 			className={clsx(
+				'Space',
 				'w-24 aspect-square relative grid place-items-center border-2 border-orange-900 text-5xl select-none',
 				isMiddleRow && middleRowColumnClass,
 				isMiddleRow && 'row-start-2',
@@ -333,7 +334,12 @@ function Space({
 		>
 			{/* space number */}
 			{index < NUM_SPACES ? (
-				<span className="absolute top-1 right-2 text-sm opacity-90">
+				<span
+					className={clsx(
+						'space-number',
+						'absolute top-1 right-2 text-sm opacity-90'
+					)}
+				>
 					{index + 1}
 				</span>
 			) : null}
