@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+	body {
+		font-family: Papyrus, fantasy;
+	}
+
 	h2 {
 		@apply font-bold text-xl mb-2;
 	}
