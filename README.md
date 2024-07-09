@@ -14,7 +14,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## About
 
-Built for [AWS Amplify Web Dev Challenge](https://www.learnwithjason.dev/blog/web-dev-challenge-giveaway-full-stack-amplify).
+Built for [LWJ x AWS Amplify Web Dev Challenge](https://www.learnwithjason.dev/blog/web-dev-challenge-giveaway-full-stack-amplify).
 
 > The prompt: “build a retro games-themed web app using AWS Amplify”
 
