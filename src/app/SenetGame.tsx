@@ -205,7 +205,7 @@ export default function SenetGame() {
 
 				<p>Turn number: {turnNum}</p>
 				<p className="inline-flex items-center gap-2">
-					{toSentenceCase(turn)}'s turn:
+					{toSentenceCase(turn)}&apos;s turn:
 					{didSticksRoll ? (
 						<>
 							<span
